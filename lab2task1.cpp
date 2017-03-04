@@ -88,7 +88,7 @@ void Harm(float a, float b)
 
 void Info()
 {
-	printf("This is the realization of task 1(lab2). The author is Angelina Belyasova.\nAll rights reserved.\n");
+	printf("This is the realization of task 1(lab2). The author is Angelina Belyasova (v. 1.0.0).\nAll rights reserved.\n");
 }
 
 int CheckForInt(char *s)
