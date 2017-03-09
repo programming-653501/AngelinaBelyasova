@@ -8,6 +8,10 @@ using namespace std;
 char * coder(char *s, int size);
 char * decoder(char *s, int size);
 int check(char *s);
+void runarray(char *s, char **arr, int size, void(*fn)(char *a, char *b));
+void f1(char *a, char *b);
+void f2(char *a, char *b);
+void f3(char *a, char *b);
 
 int main()
 {
@@ -54,54 +58,19 @@ int main()
 			if (docontinue == 1 || docontinue == 2) cond = false;
 		}
 	} while (docontinue == 1);
-    return 0;
+	return 0;
 }
 
 char * coder(char *s, int size)
 {
-	int circles = (size + 1) / 2;
-	int beg = 0, end = size - 1;
 	char **arr = new char*[size];
 	for (int i = 0; i < size; i++)
 	{
 		arr[i] = new char[size];
 		memset(arr[i], '\0', size);
 	}
+	runarray(s, arr, size, f1);
 	int ind = 0;
-	int len = (int)strlen(s);
-	for (int k = 0; ind < len; k++)
-	{
-		int j = beg, i = beg;
-		for (; j <= end && ind < len; j++)
-		{
-			arr[j][i] = s[ind];
-			ind++;
-		}
-		i++;
-		j--;
-		for (; i <= end && ind < len; i++)
-		{
-			arr[j][i] = s[ind];
-			ind++;
-		}
-		j--;
-		i--;
-		for (; j >= beg && ind < len; j--)
-		{
-			arr[j][i] = s[ind];
-			ind++;
-		}
-		i--;
-		j++;
-		for (; i > beg && ind < len; i--)
-		{
-			arr[j][i] = s[ind];
-			ind++;
-		}
-		end--;
-		beg++;
-	}
-	ind = 0;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -113,55 +82,19 @@ char * coder(char *s, int size)
 			}
 		}
 	}
-	s[ind] = '\0';
 	return s;
 }
 
 char * decoder(char *s, int size)
 {
-	int circles = (size + 1) / 2;
-	int beg = 0, end = size - 1;
 	char **arr = new char*[size];
 	for (int i = 0; i < size; i++)
 	{
 		arr[i] = new char[size];
 		memset(arr[i], '\0', size);
 	}
+	runarray(s, arr, size, f3);
 	int ind = 0;
-	int len = (int)strlen(s);
-	for (int k = 0; ind < len; k++)
-	{
-		int j = beg, i = beg;
-		for (; j <= end && ind < len; j++)
-		{
-			arr[j][i] = 1;
-			ind++;
-		}
-		i++;
-		j--;
-		for (; i <= end && ind < len; i++)
-		{
-			arr[j][i] = 1;
-			ind++;
-		}
-		j--;
-		i--;
-		for (; j >= beg && ind < len; j--)
-		{
-			arr[j][i] = 1;
-			ind++;
-		}
-		i--;
-		j++;
-		for (; i > beg && ind < len; i--)
-		{
-			arr[j][i] = 1;
-			ind++;
-		}
-		end--;
-		beg++;
-	}
-	ind = 0;
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size; j++)
@@ -174,41 +107,62 @@ char * decoder(char *s, int size)
 		}
 	}
 	ind = 0;
-	beg = 0, end = size - 1;
+	runarray(s, arr, size, f2);
+	return s;
+}
+
+void runarray(char *s, char ** arr, int size, void(*fn)(char *a, char *b))
+{
+	int beg = 0, end = size - 1;
+	int ind = 0;
+	int len = (int)strlen(s);
 	for (int k = 0; ind < len; k++)
 	{
 		int j = beg, i = beg;
 		for (; j <= end && ind < len; j++)
 		{
-			s[ind] = arr[j][i];
+			(*fn)(&arr[j][i], &s[ind]);
 			ind++;
 		}
 		i++;
 		j--;
 		for (; i <= end && ind < len; i++)
 		{
-			s[ind] = arr[j][i];
+			(*fn)(&arr[j][i], &s[ind]);
 			ind++;
 		}
 		j--;
 		i--;
 		for (; j >= beg && ind < len; j--)
 		{
-			s[ind] = arr[j][i];
+			(*fn)(&arr[j][i], &s[ind]);
 			ind++;
 		}
 		i--;
 		j++;
 		for (; i > beg && ind < len; i--)
 		{
-			s[ind] = arr[j][i];
+			(*fn)(&arr[j][i], &s[ind]);
 			ind++;
 		}
 		end--;
 		beg++;
 	}
-	s[ind] = '\0';
-	return s;
+}
+
+void f1(char *a, char *b)
+{
+	*a = *b;
+}
+
+void f2(char *a, char *b)
+{
+	*b = *a;
+}
+
+void f3(char *a, char *b)
+{
+	*a = 1;
 }
 
 int check(char *s)
