@@ -41,6 +41,7 @@ int main()
 		head = parse(number);
 
 		toOctal(head);
+		cout << "Your number in octal radix:\n";
 		showResidues();
 		cout << endl;
 
