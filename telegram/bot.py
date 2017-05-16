@@ -22,8 +22,6 @@ def handle_start(message):
         database.sadd("users", message.from_user.id)
         database.save()
 
-    print(database.hgetall("{user_id}.answers".format(user_id=message.from_user.id)))
-
 
 @bot.message_handler(commands=['help'])
 def handle_help(message):
